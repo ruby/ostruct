@@ -53,8 +53,8 @@
 #   first_pet  = OpenStruct.new(:name => "Rowdy", :owner => "John Smith")
 #   second_pet = OpenStruct.new(:name => "Rowdy")
 #
-#   first_pet.owner = nil
-#   first_pet                 # => #<OpenStruct name="Rowdy", owner=nil>
+#   first_pet.owner = "John Smith"
+#   first_pet                 # => #<OpenStruct name="Rowdy", owner="John Smith">
 #   first_pet == second_pet   # => false
 #
 #   first_pet.delete_field(:owner)
