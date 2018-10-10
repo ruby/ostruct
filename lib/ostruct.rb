@@ -202,7 +202,7 @@ class OpenStruct
       if len != 1
         raise ArgumentError, "wrong number of arguments (#{len} for 1)", caller(1)
       end
-      modifiable?[new_ostruct_member!(mname)] = args[0]
+      modifiable?[new_ostruct_member!(mname)] = args[0].is_a?(Hash) ? OpenStruct.new(args[0]) : args[0]
     elsif len == 0 # and /\A[a-z_]\w*\z/ =~ mid #
       if @table.key?(mid)
         new_ostruct_member!(mid) unless frozen?
