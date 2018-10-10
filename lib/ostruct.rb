@@ -93,7 +93,7 @@ class OpenStruct
     if hash
       hash.each_pair do |k, v|
         k = k.to_sym
-        @table[k] = v
+        @table[k] = v.is_a?(Hash) ? OpenStruct.new(v) : v
       end
     end
   end
