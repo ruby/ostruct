@@ -73,8 +73,6 @@
 # of these properties compared to using a Hash or a Struct.
 #
 class OpenStruct
-  attr_reader :recursive
-
   #
   # Creates a new OpenStruct object.  By default, the resulting OpenStruct
   # object will have no attributes.
@@ -95,7 +93,7 @@ class OpenStruct
     if hash
       hash.each_pair do |k, v|
         k = k.to_sym
-        @table[k] = (recursive && v.is_a?(Hash)) ? OpenStruct.new(v,true) : v
+        @table[k] = (@recursive && v.respond_to?(:to_hash)) ? OpenStruct.new(v,true) : v
       end
     end
   end
@@ -204,7 +202,7 @@ class OpenStruct
       if len != 1
         raise ArgumentError, "wrong number of arguments (#{len} for 1)", caller(1)
       end
-      modifiable?[new_ostruct_member!(mname)] = (recursive && args[0].is_a?(Hash)) ? OpenStruct.new(args[0],true) : args[0]
+      modifiable?[new_ostruct_member!(mname)] = (@recursive && args[0].respond_to?(:to_hash)) ? OpenStruct.new(args[0],true) : args[0]
     elsif len == 0 # and /\A[a-z_]\w*\z/ =~ mid #
       if @table.key?(mid)
         new_ostruct_member!(mid) unless frozen?
