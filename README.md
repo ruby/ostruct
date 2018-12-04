@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ostruct
+    $ gem install rubysl-ostruct
 
 ## Usage
 
