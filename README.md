@@ -1,4 +1,4 @@
-# OpenStruct [![Version](https://badge.fury.io/rb/ostruct.svg)](https://badge.fury.io/rb/ostruct) [![Default Gem](https://img.shields.io/badge/stdgem-default-9c1260.svg)](https://stdgems.org/ostruct/) [![Travis](https://travis-ci.com/ruby/ostruct.svg)](https://travis-ci.com/ruby/ostruct)
+# OpenStruct [![Version](https://badge.fury.io/rb/ostruct.svg)](https://badge.fury.io/rb/ostruct) [![Default Gem](https://img.shields.io/badge/stdgem-default-9c1260.svg)](https://stdgems.org/ostruct/) [![Test](https://github.com/ruby/ostruct/workflows/test/badge.svg)](https://github.com/ruby/ostruct/actions?query=workflow%3Atest)
 
 An OpenStruct is a data structure, similar to a Hash, that allows the definition of arbitrary attributes with their accompanying values. This is accomplished by using Ruby's metaprogramming to define methods on the class itself.
 
