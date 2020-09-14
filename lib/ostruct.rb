@@ -124,7 +124,7 @@ class OpenStruct
     @table = {}
     if hash
       hash.each_pair do |k, v|
-        self[k] = v
+        set_ostruct_member_value!(k, v)
       end
     end
   end
@@ -228,7 +228,7 @@ class OpenStruct
       if len != 1
         raise ArgumentError, "wrong number of arguments (given #{len}, expected 1)", caller(1)
       end
-      self[mname]= args[0]
+      set_ostruct_member_value!(mname, args[0])
     elsif len == 0
     elsif @table.key?(mid)
       raise ArgumentError, "wrong number of arguments (given #{len}, expected 0)"
@@ -272,6 +272,8 @@ class OpenStruct
     new_ostruct_member!(name)
     @table[name] = value
   end
+  alias_method :set_ostruct_member_value!, :[]=
+  private :set_ostruct_member_value!
 
   # :call-seq:
   #   ostruct.dig(name, *identifiers) -> object
