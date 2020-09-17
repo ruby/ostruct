@@ -243,7 +243,7 @@ class TC_OpenStruct < Test::Unit::TestCase
     assert_nil os.foo
   end
 
-  def test_overriden_private_methods
+  def test_overridden_private_methods
     os = OpenStruct.new(puts: :foo, format: :bar)
     assert_equal(:foo, os.puts)
     assert_equal(:bar, os.format)
