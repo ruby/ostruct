@@ -1,3 +1,11 @@
+task :release do
+  cur = `git branch --show-current`
+  if cur != 'master'
+    puts 'Release only from master branch'
+    exit(1)
+  end
+end
+
 require "bundler/gem_tasks"
 require "rake/testtask"
 
