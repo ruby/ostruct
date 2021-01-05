@@ -250,6 +250,7 @@ class OpenStruct
       end
       set_ostruct_member_value!(mname, args[0])
     elsif len == 0
+      @table[mid]
     else
       begin
         super
