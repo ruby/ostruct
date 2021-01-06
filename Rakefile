@@ -1,8 +1,8 @@
 task :release do
-  cur = `git branch --show-current`
+  cur = `git branch --show-current`.chomp
   if cur != 'master'
     puts 'Release only from master branch'
-    exit(1)
+    exit(-1)
   end
 end
 
