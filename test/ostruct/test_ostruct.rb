@@ -370,23 +370,23 @@ class TC_OpenStruct < Test::Unit::TestCase
 
   def test_legacy_yaml
     s = "--- !ruby/object:OpenStruct\ntable:\n  :foo: 42\n"
-    o = YAML.load(s)
+    o = YAML.safe_load(s, permitted_classes: [Symbol, OpenStruct])
     assert_equal(42, o.foo)
 
     o = OpenStruct.new(table: {foo: 42})
-    assert_equal({foo: 42}, YAML.load(YAML.dump(o)).table)
-  end
+    assert_equal({foo: 42}, YAML.safe_load(YAML.dump(o), permitted_classes: [Symbol, OpenStruct]).table)
+  end if RUBY_VERSION >= '2.6'
 
   def test_yaml
     h = {name: "John Smith", age: 70, pension: 300.42}
     yaml = "--- !ruby/object:OpenStruct\nname: John Smith\nage: 70\npension: 300.42\n"
     os1 = OpenStruct.new(h)
-    os2 = YAML.load(os1.to_yaml)
+    os2 = YAML.safe_load(os1.to_yaml, permitted_classes: [Symbol, OpenStruct])
     assert_equal yaml, os1.to_yaml
     assert_equal os1, os2
     assert_equal true, os1.eql?(os2)
     assert_equal 300.42, os2.pension
-  end
+  end if RUBY_VERSION >= '2.6'
 
   def test_marshal
     o = OpenStruct.new(name: "John Smith", age: 70, pension: 300.42)
