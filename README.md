@@ -8,7 +8,7 @@ The `ostruct` library comes pre-packaged with Ruby. No installation is necessary
 
 ## Usage
 
-```
+```ruby
   require "ostruct"
 
   person = OpenStruct.new
@@ -22,14 +22,14 @@ The `ostruct` library comes pre-packaged with Ruby. No installation is necessary
 
 An OpenStruct employs a Hash internally to store the attributes and values and can even be initialized with one:
 
-```
+```ruby
   australia = OpenStruct.new(:country => "Australia", :capital => "Canberra")
     # => #<OpenStruct country="Australia", capital="Canberra">
 ```
 
 Hash keys with spaces or characters that could normally not be used for method calls (e.g. <code>()[]*</code>) will not be immediately available on the OpenStruct object as a method for retrieval or assignment, but can still be reached through the Object#send method.
 
-```
+```ruby
   measurements = OpenStruct.new("length (in inches)" => 24)
   measurements.send("length (in inches)")   # => 24
 
@@ -41,7 +41,7 @@ Hash keys with spaces or characters that could normally not be used for method c
 
 Removing the presence of an attribute requires the execution of the delete_field method as setting the property value to +nil+ will not remove the attribute.
 
-```
+```ruby
   first_pet  = OpenStruct.new(:name => "Rowdy", :owner => "John Smith")
   second_pet = OpenStruct.new(:name => "Rowdy")
 
