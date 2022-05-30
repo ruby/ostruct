@@ -452,7 +452,7 @@ class OpenStruct
   def deconstruct_keys(keys)
     deconstructed = {}
     keys.each do |key|
-      deconstructed[key] = send(key)
+      deconstructed[key] = public_send(key)
     end
     deconstructed
   end
