@@ -412,4 +412,16 @@ class TC_OpenStruct < Test::Unit::TestCase
     assert_equal('my-class', os.class)
     assert_equal(OpenStruct, os.class!)
   end
+
+  def test_pattern_matching
+    os = OpenStruct.new(class: 'my-class', method: 'post')
+    instance_eval(<<~RUBY)
+      case os
+      in { class: 'my-class', method: 'post' }
+        assert true
+      else
+        assert false
+      end
+    RUBY
+  end if RUBY_VERSION >= '2.7'
 end

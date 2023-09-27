@@ -429,6 +429,35 @@ class OpenStruct
   end
 
   #
+  # Returns a hash of attributes for the given keys. Provides the pattern
+  # matching interface for matching against hash patterns. For example:
+  #
+  #   require "ostruct"
+  #
+  #   def greeting_for(person)
+  #     case person
+  #     in { name: "Mary" }
+  #       "Welcome back, Mary!"
+  #     in { name: }
+  #       "Welcome stranger!"
+  #     end
+  #   end
+  #
+  #   person = OpenStruct.new(name: "Mary")
+  #   greeting_for(person) # => "Welcome back, Mary!"
+  #
+  #   person = OpenStruct.new
+  #   greeting_for(person) # => "Welcome stranger!"
+  #
+  def deconstruct_keys(keys)
+    deconstructed = {}
+    keys.each do |key|
+      deconstructed[key] = public_send(key)
+    end
+    deconstructed
+  end
+
+  #
   # Provides marshalling support for use by the YAML library.
   #
   def encode_with(coder) # :nodoc:
