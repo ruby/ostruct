@@ -387,18 +387,18 @@ class OpenStruct
   #
   def inspect
     ids = (Thread.current[InspectKey] ||= [])
-    if ids.include?(object_id)
-      detail = ' ...'
+
+    detail = if ids.include?(object_id)
+      ' ...'
     else
       ids << object_id
       begin
-        detail = @table.map do |key, value|
-          " #{key}=#{value.inspect}"
-        end.join(',')
+        @table.map { |k, v| " #{k}=#{v.inspect}" }.join(',')
       ensure
         ids.pop
       end
     end
+
     ['#<', self.class!, detail, '>'].join
   end
   alias :to_s :inspect
