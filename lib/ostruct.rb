@@ -233,16 +233,15 @@ class OpenStruct
   #
   def new_ostruct_member!(name) # :nodoc:
     unless @table.key?(name) || is_method_protected!(name)
+      # use generic method with __callee__ for getter
+      singleton_class.alias_method(name, :__get_callee__!)
+
       if defined?(::Ractor)
-        getter_proc = nil.instance_eval{ Proc.new { @table[name] } }
         setter_proc = nil.instance_eval{ Proc.new {|x| @table[name] = x} }
-        ::Ractor.make_shareable(getter_proc)
         ::Ractor.make_shareable(setter_proc)
       else
-        getter_proc = Proc.new { @table[name] }
         setter_proc = Proc.new {|x| @table[name] = x}
       end
-      define_singleton_method!(name, &getter_proc)
       define_singleton_method!("#{name}=", &setter_proc)
     end
   end
@@ -264,6 +263,10 @@ class OpenStruct
         end
       end
     end
+  end
+
+  def __get_callee__!
+    @table[__callee__]
   end
 
   def freeze
