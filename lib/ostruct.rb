@@ -271,6 +271,29 @@ class OpenStruct
     super
   end
 
+  def singleton_methods(*) # :nodoc:
+    (super + @table.keys.flat_map {|k| [k, :"#{k}="] }).uniq
+  end
+
+  def methods(*) # :nodoc:
+    (super + @table.keys.flat_map {|k| [k, :"#{k}="] }).uniq
+  end
+
+  def respond_to_missing?(mid, *) # :nodoc:
+    if (mname = mid[/.*(?==\z)/m])
+      @table&.key?(mname.to_sym)
+    elsif @table&.key?(mid)
+      true
+    else
+      begin
+        super
+      rescue NoMethodError => err
+        err.backtrace.shift
+        raise!
+      end
+    end
+  end
+
   private def method_missing(mid, *args) # :nodoc:
     len = args.length
     if mname = mid[/.*(?==\z)/m]
