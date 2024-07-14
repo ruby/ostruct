@@ -231,7 +231,7 @@ class OpenStruct
   # OpenStruct. It does this by using the metaprogramming function
   # define_singleton_method for both the getter method and the setter method.
   #
-  def new_ostruct_member!(name) # :nodoc:
+  def override_ostruct_method!(name) # :nodoc:
     unless @table.key?(name) || is_method_protected!(name)
       if defined?(::Ractor)
         getter_proc = nil.instance_eval{ Proc.new { @table[name] } }
@@ -246,11 +246,11 @@ class OpenStruct
       define_singleton_method!("#{name}=", &setter_proc)
     end
   end
-  private :new_ostruct_member!
+  private :override_ostruct_method!
 
   private def is_method_protected!(name) # :nodoc:
     if !respond_to?(name, true)
-      false
+      true
     elsif name.match?(/!$/)
       true
     else
@@ -340,7 +340,7 @@ class OpenStruct
   #
   def []=(name, value)
     name = name.to_sym
-    new_ostruct_member!(name)
+    override_ostruct_method!(name)
     @table[name] = value
   end
   alias_method :set_ostruct_member_value!, :[]=
