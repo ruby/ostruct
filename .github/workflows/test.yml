@@ -29,7 +29,5 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-        # In order to support Ruby 2.5, use a pre-2.4 Bundler.
-        bundler: '2.3.26'
     - name: Run test
       run: bundle exec rake test
