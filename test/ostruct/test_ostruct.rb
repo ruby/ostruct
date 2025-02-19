@@ -431,4 +431,51 @@ class TC_OpenStruct < Test::Unit::TestCase
       )
     end
   end
+  def setup
+  end
+
+  def test_has_key_with_symbol
+    o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
+    assert_true o.has_key?(:name)
+    assert_true o.has_key?(:age)
+    assert_true o.has_key?(:pension)
+    assert_false o.has_key?(:address)
+  end
+
+  def test_has_key_with_string
+    o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
+    assert_true o.has_key?("name")
+    assert_true o.has_key?("age")
+    assert_true o.has_key?("pension")
+    assert_false o.has_key?("address")
+  end
+
+  def test_has_key_after_deletion
+    o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
+    o.delete_field(:name)
+    assert_false o.has_key?(:name)
+  end
+
+  def test_has_key_with_nil_value
+    o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
+    o.pension = nil
+    assert_true o.has_key?(:pension)
+  end
+
+  def test_has_key_with_new_ostruct
+    os = OpenStruct.new
+    assert_false os.has_key?(:any_key)
+  end
+
+  def test_has_key_after_setting_value
+    o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
+    o.phone = "123-456-7890"
+    assert_true o.has_key?(:phone)
+  end
+
+  def test_has_key_case_sensitivity
+    o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
+    assert_true o.has_key?(:name)
+    assert_false o.has_key?(:Name)
+  end
 end
