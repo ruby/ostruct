@@ -358,26 +358,34 @@ class TC_OpenStruct < Test::Unit::TestCase
 
   def test_ractor
     assert_ractor(<<~RUBY, require: 'ostruct')
+      class Ractor
+        alias value take
+      end unless Ractor.method_defined? :value # compat with Ruby 3.4 and olders
+
       obj1 = OpenStruct.new(a: 42, b: 42)
       obj1.c = 42
       obj1.freeze
 
       obj2 = Ractor.new obj1 do |obj|
         obj
-      end.take
+      end.value
       assert obj1.object_id == obj2.object_id
     RUBY
   end if defined?(Ractor)
 
   def test_access_methods_from_different_ractor
     assert_ractor(<<~RUBY, require: 'ostruct')
+      class Ractor
+        alias value take
+      end unless Ractor.method_defined? :value # compat with Ruby 3.4 and olders
+
       os = OpenStruct.new
       os.value = 100
       r = Ractor.new(os) do |x|
         v = x.value
-        Ractor.yield v
+        v
       end
-      assert 100 == r.take
+      assert 100 == r.value
     RUBY
   end if defined?(Ractor)
 
