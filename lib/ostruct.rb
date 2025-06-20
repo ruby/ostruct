@@ -380,6 +380,30 @@ class OpenStruct
     end
   end
 
+
+  # Returns +true+ if the given name is a member of this OpenStruct object, +false+ otherwise.
+  # The given +name+ is converted to a symbol before checking.
+  #
+  #   require "ostruct"
+  #   person = OpenStruct.new("name" => "John Smith", :age => 70)
+  #   person.has_key?(:name)   # => true
+  #   person.has_key?("age")   # => true
+  #   person.has_key?(:phone)  # => false
+  #
+  # This method can be used to test for the presence of a value without creating
+  # an accessor method if it doesn't exist:
+  #
+  #   person = OpenStruct.new
+  #   person.name = "John"
+  #   person.has_key?(:name)   # => true
+  #   person.has_key?(:age)    # => false
+  #   person.age               # => nil (but creates an accessor)
+  #   person.has_key?(:age)    # => false
+  #
+  def has_key?(name)
+    @table.has_key?(name.to_sym)
+  end
+
   InspectKey = :__inspect_key__ # :nodoc:
 
   #
