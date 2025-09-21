@@ -389,23 +389,25 @@ class OpenStruct
   #
   #   require "ostruct"
   #   person = OpenStruct.new("name" => "John Smith", :age => 70)
-  #   person.has_key?(:name)   # => true
-  #   person.has_key?("age")   # => true
-  #   person.has_key?(:phone)  # => false
+  #   person.include?(:name)   # => true
+  #   person.include?("age")   # => true
+  #   person.include?(:phone)  # => false
   #
   # This method can be used to test for the presence of a value without creating
   # an accessor method if it doesn't exist:
   #
   #   person = OpenStruct.new
   #   person.name = "John"
-  #   person.has_key?(:name)   # => true
-  #   person.has_key?(:age)    # => false
+  #   person.include?(:name)   # => true
+  #   person.include?(:age)    # => false
   #   person.age               # => nil (but creates an accessor)
-  #   person.has_key?(:age)    # => false
+  #   person.include?(:age)    # => false
   #
-  def has_key?(name)
+  def include?(name)
     @table.has_key?(name.to_sym)
   end
+  alias_method :has_key?, :include?
+  alias_method :key?, :include?
 
   InspectKey = :__inspect_key__ # :nodoc:
 

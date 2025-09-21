@@ -442,48 +442,62 @@ class TC_OpenStruct < Test::Unit::TestCase
   def setup
   end
 
-  def test_has_key_with_symbol
-    o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
-    assert_true o.has_key?(:name)
-    assert_true o.has_key?(:age)
-    assert_true o.has_key?(:pension)
-    assert_false o.has_key?(:address)
+  def test_has_key_alias
+    o = OpenStruct.new(name: "John Smith", age: 70)
+    assert_equal o.include?(:name), o.has_key?(:name)
+    assert_equal o.include?("name"), o.has_key?("name")
+    assert_equal o.include?(:missing), o.has_key?(:missing)
   end
 
-  def test_has_key_with_string
+  def test_include_with_symbol
     o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
-    assert_true o.has_key?("name")
-    assert_true o.has_key?("age")
-    assert_true o.has_key?("pension")
-    assert_false o.has_key?("address")
+    assert_true o.include?(:name)
+    assert_true o.include?(:age)
+    assert_true o.include?(:pension)
+    assert_false o.include?(:address)
   end
 
-  def test_has_key_after_deletion
+  def test_include_with_string
+    o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
+    assert_true o.include?("name")
+    assert_true o.include?("age")
+    assert_true o.include?("pension")
+    assert_false o.include?("address")
+  end
+
+  def test_include_after_deletion
     o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
     o.delete_field(:name)
-    assert_false o.has_key?(:name)
+    assert_false o.include?(:name)
   end
 
-  def test_has_key_with_nil_value
+  def test_include_with_nil_value
     o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
     o.pension = nil
-    assert_true o.has_key?(:pension)
+    assert_true o.include?(:pension)
   end
 
-  def test_has_key_with_new_ostruct
+  def test_include_with_new_ostruct
     os = OpenStruct.new
-    assert_false os.has_key?(:any_key)
+    assert_false os.include?(:any_key)
   end
 
-  def test_has_key_after_setting_value
+  def test_include_after_setting_value
     o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
     o.phone = "123-456-7890"
-    assert_true o.has_key?(:phone)
+    assert_true o.include?(:phone)
   end
 
-  def test_has_key_case_sensitivity
+  def test_include_case_sensitivity
     o = OpenStruct.new(name: "John Smith", age: 70, pension: 300)
-    assert_true o.has_key?(:name)
-    assert_false o.has_key?(:Name)
+    assert_true o.include?(:name)
+    assert_false o.include?(:Name)
+  end
+
+  def test_key_alias
+    o = OpenStruct.new(name: "John Smith", age: 70)
+    assert_equal o.include?(:name), o.key?(:name)
+    assert_equal o.include?("name"), o.key?("name")
+    assert_equal o.include?(:missing), o.key?(:missing)
   end
 end
