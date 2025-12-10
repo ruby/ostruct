@@ -21,7 +21,7 @@ jobs:
         exclude:
         - { os: macos-latest, ruby: '2.5' }
         include:
-        - { os: macos-13, ruby: '2.5' }
+        - { os: macos-15-intel, ruby: '2.5' }
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v6
