@@ -4,7 +4,19 @@ An OpenStruct is a data structure, similar to a Hash, that allows the definition
 
 ## Installation
 
-The `ostruct` library comes pre-packaged with Ruby. No installation is necessary.
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'ostruct'
+```
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install ostruct
 
 ## Usage
 
