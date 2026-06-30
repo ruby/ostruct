@@ -450,9 +450,10 @@ class OpenStruct
     @table.each_pair do |key, value|
       coder[key.to_s] = value
     end
-    if @table.size == 1 && @table.key?(:table) # support for legacy format
-      # in the very unlikely case of a single entry called 'table'
-      coder['legacy_support!'] = true # add a bogus second entry
+
+    # ensure data isn't corrupted on reload if it looks like the legacy format
+    if @table.size == 1 && @table.key?(:table) || @table.size == 2 && [:modifiable, :table].all? { |x| @table.key?(x) }
+      coder['legacy_support!'] = true # add a bogus entry to change the size
     end
   end
 
@@ -461,12 +462,12 @@ class OpenStruct
   #
   def init_with(coder) # :nodoc:
     h = coder.map
-    if h.size == 1 # support for legacy format
-      key, val = h.first
-      if key == 'table'
-        h = val
-      end
+
+    # support for legacy format
+    if h.size == 1 && h.key?('table') || h.size == 2 && %w[modifiable table].all? { |x| h.key?(x) }
+      h = h['table']
     end
+
     update_to_values!(h)
   end
 
