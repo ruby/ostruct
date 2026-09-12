@@ -254,6 +254,8 @@ class OpenStruct
   private def is_method_protected!(name) # :nodoc:
     if !respond_to?(name, true)
       false
+    elsif name.match?(/^object_id$/)
+      true
     elsif name.match?(/!$/)
       true
     else
