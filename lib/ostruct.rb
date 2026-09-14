@@ -233,23 +233,24 @@ class OpenStruct
   #
   def new_ostruct_member!(name) # :nodoc:
     unless @table.key?(name) || is_method_protected!(name)
+      singleton_class!.define_method(name, ::OpenStruct.instance_method(:__get_ostruct_member__!))
+
       if defined?(::Ractor.shareable_proc)
-        getter_proc = Ractor.shareable_proc { @table[name] }
         setter_proc = Ractor.shareable_proc {|x| @table[name] = x}
       elsif defined?(::Ractor)
-        getter_proc = nil.instance_eval{ Proc.new { @table[name] } }
         setter_proc = nil.instance_eval{ Proc.new {|x| @table[name] = x} }
-        ::Ractor.make_shareable(getter_proc)
         ::Ractor.make_shareable(setter_proc)
       else
-        getter_proc = Proc.new { @table[name] }
         setter_proc = Proc.new {|x| @table[name] = x}
       end
-      define_singleton_method!(name, &getter_proc)
       define_singleton_method!("#{name}=", &setter_proc)
     end
   end
   private :new_ostruct_member!
+
+  def __get_ostruct_member__! # :nodoc:
+    @table[__callee__]
+  end
 
   private def is_method_protected!(name) # :nodoc:
     if !respond_to?(name, true)
