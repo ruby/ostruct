@@ -155,9 +155,17 @@ class OpenStruct
   end
 
   private def update_to_values!(hash) # :nodoc:
+    old_table = @table
     @table = {}
     hash.each_pair do |k, v|
       set_ostruct_member_value!(k, v)
+    end
+    old_table&.each_key do |key|
+      next if @table.key?(key)
+      begin
+        singleton_class!.remove_method(key, "#{key}=")
+      rescue NameError
+      end
     end
   end
 
