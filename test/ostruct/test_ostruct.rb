@@ -439,4 +439,11 @@ class TC_OpenStruct < Test::Unit::TestCase
       )
     end
   end
+  def test_inspect_with_object_id_field
+    child = OpenStruct.new(object_id: 1, value: 2)
+    parent = OpenStruct.new(object_id: 1, child: child)
+
+    assert_match(/child=#<OpenStruct object_id=1, value=2>/, parent.inspect)
+  end
+
 end
