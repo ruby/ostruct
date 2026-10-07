@@ -144,9 +144,10 @@ class OpenStruct
   end
 
   # Duplicates an OpenStruct object's Hash table.
-  private def initialize_clone(orig) # :nodoc:
-    super # clones the singleton class for us
-    @table = @table.dup unless @table.frozen?
+  private def initialize_clone(orig, freeze: nil) # :nodoc:
+    super(orig) # clones the singleton class for us
+    @table = @table.dup unless @table.frozen? && freeze != false
+    @table.freeze if freeze
   end
 
   private def initialize_dup(orig) # :nodoc:

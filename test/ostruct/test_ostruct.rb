@@ -439,4 +439,17 @@ class TC_OpenStruct < Test::Unit::TestCase
       )
     end
   end
+  def test_clone_freeze_option
+    source = OpenStruct.new(value: 1).freeze
+    mutable_copy = source.clone(freeze: false)
+    mutable_copy.value = 2
+
+    assert_equal(2, mutable_copy.value)
+    assert_equal(1, source.value)
+
+    frozen_copy = mutable_copy.clone(freeze: true)
+    assert_equal(true, frozen_copy.frozen?)
+    assert_raise(FrozenError) { frozen_copy.value = 3 }
+  end
+
 end
