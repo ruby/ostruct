@@ -252,12 +252,13 @@ class OpenStruct
   private :new_ostruct_member!
 
   private def is_method_protected!(name) # :nodoc:
-    if !respond_to?(name, true)
+    sc = singleton_class!
+    if !(sc.method_defined?(name) || sc.private_method_defined?(name))
       false
     elsif name.match?(/!$/)
       true
     else
-      owner = method!(name).owner
+      owner = sc.instance_method(name).owner
       if owner.class == ::Class
         owner < ::OpenStruct
       else
