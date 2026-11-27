@@ -439,4 +439,10 @@ class TC_OpenStruct < Test::Unit::TestCase
       )
     end
   end
+  def test_initialize_with_respond_to_field
+    o = OpenStruct.new(respond_to?: false, next_field: 3)
+
+    assert_equal({respond_to?: false, next_field: 3}, o.to_h)
+  end
+
 end
