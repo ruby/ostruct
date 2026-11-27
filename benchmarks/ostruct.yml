@@ -1,0 +1,154 @@
+prelude: |
+  # frozen_string_literal: true
+
+  require "ostruct"
+  keys = (0..29).map { :"method_#{_1}" }
+  input = keys.to_h { [_1, _1] }
+
+benchmark:
+  new: |
+    OpenStruct.new(input)
+
+  attr_write_read: |
+    ostruct = OpenStruct.new
+    ostruct.method_0 = "foo"
+    ostruct.method_1 = "bar"
+    ostruct.method_2 = "baz"
+    ostruct.method_3 = "quux"
+    ostruct.method_4 = "foo"
+    ostruct.method_5 = "bar"
+    ostruct.method_6 = "baz"
+    ostruct.method_7 = "quux"
+    ostruct.method_8 = "quux"
+    ostruct.method_9 = "quux"
+    ostruct.method_10 = "foo"
+    ostruct.method_11 = "bar"
+    ostruct.method_12 = "baz"
+    ostruct.method_13 = "quux"
+    ostruct.method_14 = "foo"
+    ostruct.method_15 = "bar"
+    ostruct.method_16 = "baz"
+    ostruct.method_17 = "quux"
+    ostruct.method_18 = "quux"
+    ostruct.method_19 = "quux"
+    ostruct.method_20 = "foo"
+    ostruct.method_21 = "bar"
+    ostruct.method_22 = "baz"
+    ostruct.method_23 = "quux"
+    ostruct.method_24 = "foo"
+    ostruct.method_25 = "bar"
+    ostruct.method_26 = "baz"
+    ostruct.method_27 = "quux"
+    ostruct.method_28 = "quux"
+    ostruct.method_29 = "quux"
+    ostruct.method_0
+    ostruct.method_1
+    ostruct.method_2
+    ostruct.method_3
+    ostruct.method_4
+    ostruct.method_5
+    ostruct.method_6
+    ostruct.method_7
+    ostruct.method_8
+    ostruct.method_9
+    ostruct.method_10
+    ostruct.method_11
+    ostruct.method_12
+    ostruct.method_13
+    ostruct.method_14
+    ostruct.method_15
+    ostruct.method_16
+    ostruct.method_17
+    ostruct.method_18
+    ostruct.method_19
+    ostruct.method_20
+    ostruct.method_21
+    ostruct.method_22
+    ostruct.method_23
+    ostruct.method_24
+    ostruct.method_25
+    ostruct.method_26
+    ostruct.method_27
+    ostruct.method_28
+    ostruct.method_29
+
+  index_write_attr_read: |
+    ostruct = OpenStruct.new
+    keys.each_with_index do ostruct[_1] = _2 end
+    keys.each do ostruct.send(_1) end
+
+  index_write_attr_read: |
+    ostruct = OpenStruct.new
+    keys.each_with_index do ostruct[_1] = _2 end
+    keys.each do ostruct.send(_1) end
+
+  null_reads: |
+    ostruct = OpenStruct.new
+    ostruct.method_0
+    ostruct.method_1
+    ostruct.method_2
+    ostruct.method_3
+    ostruct.method_4
+    ostruct.method_5
+    ostruct.method_6
+    ostruct.method_7
+    ostruct.method_8
+    ostruct.method_9
+    ostruct.method_10
+    ostruct.method_11
+    ostruct.method_12
+    ostruct.method_13
+    ostruct.method_14
+    ostruct.method_15
+    ostruct.method_16
+    ostruct.method_17
+    ostruct.method_18
+    ostruct.method_19
+    ostruct.method_20
+    ostruct.method_21
+    ostruct.method_22
+    ostruct.method_23
+    ostruct.method_24
+    ostruct.method_25
+    ostruct.method_26
+    ostruct.method_27
+    ostruct.method_28
+    ostruct.method_29
+
+  10x_reads: |
+    ostruct = OpenStruct.new(input)
+    10.times do
+      ostruct.method_0
+      ostruct.method_1
+      ostruct.method_2
+      ostruct.method_3
+      ostruct.method_4
+      ostruct.method_5
+      ostruct.method_6
+      ostruct.method_7
+      ostruct.method_8
+      ostruct.method_9
+    end
+
+  100x_reads: |
+    ostruct = OpenStruct.new(input)
+    100.times do
+      ostruct.method_0
+      ostruct.method_1
+      ostruct.method_2
+      ostruct.method_3
+      ostruct.method_4
+      ostruct.method_5
+      ostruct.method_6
+      ostruct.method_7
+      ostruct.method_8
+      ostruct.method_9
+    end
+
+contexts:
+  - name: v0.6.0
+    gems:
+      ostruct: 0.6.0
+  - name: local
+    prelude: |
+      $LOAD_PATH.unshift "./lib"
