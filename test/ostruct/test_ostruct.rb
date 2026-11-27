@@ -439,4 +439,12 @@ class TC_OpenStruct < Test::Unit::TestCase
       )
     end
   end
+  def test_delete_field_with_singleton_class_field
+    o = OpenStruct.new(singleton_class: 7, other: 4)
+
+    assert_equal(4, o.delete_field(:other))
+    assert_not_respond_to(o, :other)
+    assert_not_respond_to(o, :other=)
+  end
+
 end
