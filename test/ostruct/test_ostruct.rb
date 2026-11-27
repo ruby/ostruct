@@ -439,4 +439,12 @@ class TC_OpenStruct < Test::Unit::TestCase
       )
     end
   end
+  def test_each_pair_alias_with_colliding_fields
+    o = OpenStruct.new(to_enum: 7, other: 4)
+    assert_equal([[:to_enum, 7], [:other, 4]], o.each_pair!.to_a)
+
+    o = OpenStruct.new(each_pair: 7, other: 4)
+    assert_equal([[:each_pair, 7], [:other, 4]], o.each_pair!.to_a)
+  end
+
 end
