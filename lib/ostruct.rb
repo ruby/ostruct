@@ -383,27 +383,59 @@ class OpenStruct
     end
   end
 
+  def self.__inspect_supports_identity_set?
+    true
+  end
+
   InspectKey = :__inspect_key__ # :nodoc:
 
-  #
-  # Returns a string containing a detailed summary of the keys and values.
-  #
-  def inspect
-    ids = (Thread.current[InspectKey] ||= [])
-    if ids.include?(object_id)
-      detail = ' ...'
-    else
-      ids << object_id
-      begin
-        detail = @table.map do |key, value|
-          " #{key}=#{value.inspect}"
-        end.join(',')
-      ensure
-        ids.pop
+  # We share the same `ids` value as `Set#inspect`, so we need to use an identity Set
+  # only we're using a newer version of the `set` gem which is also using an identity Set.
+  if defined?(Set.__inspect_supports_identity_set?) && Set.__inspect_supports_identity_set?
+
+    #
+    # Returns a string containing a detailed summary of the keys and values.
+    #
+    def inspect
+      ids = (Thread.current[InspectKey] ||= Set.new.compare_by_identity)
+
+      detail = if ids.add?(self)
+        begin
+          @table.map { |k, v| " #{k}=#{v.inspect}" }.join(',')
+        ensure
+          ids.remove(self)
+        end
+      else
+        ' ...'
       end
+
+      ['#<', self.class!, detail, '>'].join
     end
-    ['#<', self.class!, detail, '>'].join
+
+  else
+
+    #
+    # Returns a string containing a detailed summary of the keys and values.
+    #
+    def inspect
+      ids = (Thread.current[InspectKey] ||= [])
+
+      detail = if ids.include?(object_id)
+        ' ...'
+      else
+        ids << object_id
+        begin
+          @table.map { |k, v| " #{k}=#{v.inspect}" }.join(',')
+        ensure
+          ids.pop
+        end
+      end
+
+      ['#<', self.class!, detail, '>'].join
+    end
+
   end
+
   alias :to_s :inspect
 
   attr_reader :table # :nodoc:
