@@ -390,10 +390,10 @@ class OpenStruct
   #
   def inspect
     ids = (Thread.current[InspectKey] ||= [])
-    if ids.include?(object_id)
+    if ids.include?(object_id!)
       detail = ' ...'
     else
-      ids << object_id
+      ids << object_id!
       begin
         detail = @table.map do |key, value|
           " #{key}=#{value.inspect}"
