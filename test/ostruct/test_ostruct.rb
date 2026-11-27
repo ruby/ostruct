@@ -439,4 +439,13 @@ class TC_OpenStruct < Test::Unit::TestCase
       )
     end
   end
+  def test_equality_with_kind_of_field
+    first = OpenStruct.new(kind_of?: false)
+    second = OpenStruct.new(kind_of?: false)
+
+    assert_equal(first, second)
+    assert(first.eql?(second))
+    assert_not_equal(first, BasicObject.new)
+  end
+
 end
