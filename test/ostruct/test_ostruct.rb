@@ -398,6 +398,15 @@ class TC_OpenStruct < Test::Unit::TestCase
     assert_equal({foo: 42}, YAML.safe_load(YAML.dump(o), permitted_classes: [Symbol, OpenStruct]).table)
   end if RUBY_VERSION >= '2.6'
 
+  def test_legacy_yaml_2
+    s = "--- !ruby/object:OpenStruct\ntable:\n  :foo: 42\nmodifiable: true\n"
+    o = YAML.safe_load(s, permitted_classes: [Symbol, OpenStruct])
+    assert_equal(42, o.foo)
+
+    o = OpenStruct.new(table: {foo: 42})
+    assert_equal({foo: 42}, YAML.safe_load(YAML.dump(o), permitted_classes: [Symbol, OpenStruct]).table)
+  end if RUBY_VERSION >= '2.6'
+
   def test_yaml
     h = {name: "John Smith", age: 70, pension: 300.42}
     yaml = "--- !ruby/object:OpenStruct\nname: John Smith\nage: 70\npension: 300.42\n"
