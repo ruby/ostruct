@@ -439,4 +439,12 @@ class TC_OpenStruct < Test::Unit::TestCase
       )
     end
   end
+  def test_setter_argument_error_with_caller_field
+    o = OpenStruct.new(caller: 5)
+
+    error = assert_raise(ArgumentError) { o.__send__(:missing=, 1, 2) }
+
+    assert_match(/given 2, expected 1/, error.message)
+  end
+
 end
